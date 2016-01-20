@@ -1,0 +1,7 @@
+node_modules
+coverage
+dist
+.DS_Store
+.sublime-gulp.cache
+.sublime-project
+.sublime-workspace
