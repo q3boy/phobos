@@ -44,7 +44,7 @@ http.createServer(app).listen(8080);
 
 ### About .phobosrc
 
-this is a js file ** NOT A JSON **. never forgot add module.exports on it's head.
+this is a js file **NOT A JSON**. never forgot add module.exports on it's head.
 
 ```javascript
 module.exports = {
