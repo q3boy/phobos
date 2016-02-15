@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.alibaba-inc.com:mars/mars-phobos.git"
+    "url": "https://q3boy@github.com/q3boy/deimos.git"
   },
   "keywords": [
     "mock",
     "mock server",
     "faker"
   ],
-  "author": "清笃 <qingdu@alibaba-inc.com>",
+  "author": "q3boy <q3boy1@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "chalk": "^1.1.1",
