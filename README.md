@@ -10,7 +10,7 @@ var phobos = require("phobos");
 var connect = require("connect");
 var http = require("http");
 
-
+// read options from $PWD/.phobosrc by default
 var options = {
   locale : 'zh_CN',
   dir : "./phobos", // dir of mock define files
