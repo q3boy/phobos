@@ -3,6 +3,8 @@
 A mock server for mars
 
 ## Usage
+
+
 ### Example
 
 ```javascript
@@ -39,6 +41,26 @@ app.use phobox(options).middleware()
 http.createServer(app).listen(8080);
 
 ```
+
+### About .phobosrc
+
+this is a js file ** NOT A JSON **. never forgot add module.exports on it's head.
+
+```javascript
+module.exports = {
+   rewrite : [ // use comments
+    {
+      test : "/wildcard/*",
+      target : "/target/$1"
+    }, {
+      test : /^\/regexp\/(\?.*)?$/, // regexp directly
+      target : "/target$1",
+      method : "get"
+    }
+  ]
+}
+```
+
 
 
 
