@@ -1,0 +1,39 @@
+[
+  {
+    "id" : "#{number 100000, 999999}",
+    "name" : "#{person.name}",
+    "age" : "#{person.age}",
+    "city" : "#{address.city}",
+    "lastLocation": {
+      "lati" : "#{number.float -180, 180, 3}",
+      "long" : "#{number.float -180, 180, 3}"
+    }
+  },{
+    "id" : "#{number 100000, 999999}",
+    "name" : "#{person.name}",
+    "age" : "#{person.age}",
+    "city" : "#{address.city}",
+    "lastLocation": {
+      "lati" : "#{number.float -180, 180, 3}",
+      "long" : "#{number.float -180, 180, 3}"
+    }
+  },{
+    "id" : "#{number 100000, 999999}",
+    "name" : "#{person.name}",
+    "age" : "#{person.age}",
+    "city" : "#{address.city}",
+    "lastLocation": {
+      "lati" : "#{number.float -180, 180, 3}",
+      "long" : "#{number.float -180, 180, 3}"
+    }
+  },{
+    "id" : "#{number 100000, 999999}",
+    "name" : "#{person.name}",
+    "age" : "#{person.age}",
+    "city" : "#{address.city}",
+    "lastLocation": {
+      "lati" : "#{number.float -180, 180, 3}",
+      "long" : "#{number.float -180, 180, 3}"
+    }
+  }
+]

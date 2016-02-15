@@ -1,0 +1,4 @@
+{
+  "name": "#{person.name}",
+  "content": "#{lorem.sentence}"
+}

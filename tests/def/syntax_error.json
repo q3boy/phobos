@@ -1,0 +1,11 @@
+{
+  "name" : "#{person.name}",
+  "age" : "#{person.age}",
+  "city" : "#{address.city}",
+  "zipcode": "#{address.zipcode",
+  "intro": "#{lorem.sentence 1}",
+  "friends_number": "#{number.int 10, 100}",
+  "lastLocation": {
+    "lati" : "#{number.float -180, 180, 3}",
+    "long" : "#{number.float -180, 180, 3}"
+  }
