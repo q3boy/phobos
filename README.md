@@ -29,20 +29,6 @@ var options = {
     },
   ]
 };
-module.exports = {
-  dir : "phobos_define",
-  rewrite : [
-    {
-      test : "/aaa*",
-      target : "/pp"
-    },
-    {
-      test : /^\/bbb\/info(\?.*)?$/,
-      target : "/pp$1",
-      method : "get"
-    }
-  ]
-}
 
 app = connect();
 
