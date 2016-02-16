@@ -42,7 +42,7 @@ for k,v of list
 
     tpl = if name then "\#{#{k}.#{name}}" else "\#{#{k}}"
     # console.log tpl
-    out.push "| #{tpl} | #{faker.fake(tpl).trim()} |"
+    out.push "| #{tpl} | #{faker.fake(tpl).trim().replace /\r?\n/g, '<br>'} |"
   out.push ''
 # console.log out
 console.log out.join "\r\n"

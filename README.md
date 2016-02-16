@@ -74,7 +74,7 @@ Usable methods: `GET`, `POST`, `DELETE`, `PUT`
 
 ### Define file
 
-define file is a JSON file. you can use `#{name [arg1[, arg2...]]}` to access perdefined variables.
+define file is a JSON file. you can use `#{name [arg1[, arg2...]]}` to access predefined variables (base on mars-deimos).
 
 ```json
 {
@@ -91,7 +91,7 @@ define file is a JSON file. you can use `#{name [arg1[, arg2...]]}` to access pe
 }
 ```
 
-#### Perdefined variables list
+#### Predefined variables list
 
 | address |  |
 | :----- | :----- |
