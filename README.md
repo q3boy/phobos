@@ -35,14 +35,14 @@ var options = {
 app = connect();
 
 // use as a connect middleware
-app.use phobox(options).middleware()
+app.use(phobox(options));
 
 // start server
 http.createServer(app).listen(8080);
 
 ```
 
-### About .phobosrc
+### About `.phobosrc`
 
 This is a js file **NOT A JSON**. Never forget to add module.exports on it's head.
 

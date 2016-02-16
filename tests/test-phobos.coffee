@@ -12,8 +12,9 @@ defDir = path.join cwd, 'tests/def'
 server =
   start : (opt, cb) ->
     app = connect()
-    @phobos = phobos opt
-    app.use @phobos.middleware()
+    # @phobos = new phobos.Phobos opt
+    app.use mw = phobos(opt)
+    @phobos = mw.phobos
     @handle = http.createServer(app)
     @handle.listen =>
       @port = @handle.address().port
@@ -42,41 +43,41 @@ describe 'phobos', ->
   describe 'init', ->
     it 'no rcfile', ->
       process.chdir cwd
-      p = phobos()
+      p = new phobos.Phobos()
       e(phobos.rewrite).to.be.empty
       process.chdir defDir
     it 'with rcfile', ->
-      p = phobos()
+      p = new phobos.Phobos()
       e(p.options.dir).to.be.eql 'phobos_define'
     it 'with error rcfile', ->
       process.chdir path.join defDir, 'error_rc'
-      p = phobos()
+      p = new phobos.Phobos()
       e(phobos.rewrite).to.be.empty
       process.chdir defDir
 
   describe 'parse define files', ->
     it 'ok', ->
-      p = phobos()
+      p = new phobos.Phobos()
       e(p.api).to.have.property 'person@all'
       e(p.api).to.have.property 'pp@get'
     it 'skip syntax error', ->
       fs.writeFileSync './phobos_define/syntax_error.json', fs.readFileSync './syntax_error.json'
-      p = phobos()
+      p = new phobos.Phobos()
       e(p.api).to.not.have.property 'syntax_error@all'
       fs.unlinkSync './phobos_define/syntax_error.json'
   describe 'routerApi', ->
     it 'method match', ->
-      p = phobos()
+      p = new phobos.Phobos()
       data = p.routerApi '/pp', 'get'
       e(data).to.be.a 'object'
     it 'all method', ->
-      p = phobos()
+      p = new phobos.Phobos()
       data1 = p.routerApi '/person', 'get'
       data2 = p.routerApi '/person', 'post'
       e(data1).to.be.a 'object'
       e(data1).to.be.eql data2
     it 'not match', ->
-      p = phobos()
+      p = new phobos.Phobos()
       data = p.routerApi '/not_exists', 'get'
       e(data).to.be.a 'undefined'
   describe 'middleware', ->

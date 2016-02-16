@@ -65,7 +65,7 @@ class Phobos
     @
 
   middleware : ->
-    (req, resp, next) =>
+    mw = (req, resp, next) =>
       method = req.method.toLowerCase()
       if urlRewrite = @routerRewrite req.url, method
         req.ordinaryUrl = url
@@ -76,6 +76,8 @@ class Phobos
       resp.writeHead 200, 'Content-Type': 'application/json; charset=utf-8'
       resp.end JSON.stringify @response.trans data, "#{url}@#{method}", query
       return
+    mw.phobos = @
+    mw
 
   routerApi : (url, method) ->
     {pathname} = urlParse url
@@ -107,4 +109,5 @@ class Phobos
     req.resume()
     return true
 
-module.exports = (opt) -> new Phobos opt
+module.exports = (opt) -> new Phobos(opt).middleware()
+module.exports.Phobos = Phobos
