@@ -6,6 +6,7 @@ dist
 build
 gulpfile.js
 deimos.coffee
+example.js
 *.sublime-gulp.cache
 *.sublime-project
 *.sublime-workspace
