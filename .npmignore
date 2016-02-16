@@ -5,6 +5,7 @@ tests
 dist
 build
 gulpfile.js
+deimos.coffee
 *.sublime-gulp.cache
 *.sublime-project
 *.sublime-workspace
