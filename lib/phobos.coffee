@@ -72,7 +72,7 @@ class Phobos
         req.url = url = urlRewrite
       {path: url, query} = urlParse req.url
       return if @routerProxy req, resp, next
-      return next() unless (data = @routerApi url, method)?
+      return unless (data = @routerApi url, method)?
       resp.writeHead 200, 'Content-Type': 'application/json; charset=utf-8'
       resp.end JSON.stringify @response.trans data, "#{url}@#{method}", query
       return
@@ -97,7 +97,8 @@ class Phobos
     req.pause()
     options = urlParse req.url
     req.url = req.ordinaryUrl
-    options.headers = req.headers
+    options.headers = {}
+    options.headers[k] = v for k,v of req.headers when k isnt 'host'
     options.method = req.method
     options.agent = false
     conn = http.request options, (serverResp)->
