@@ -35,7 +35,7 @@ var options = {
 app = connect();
 
 // use as a connect middleware
-app.use(phobox(options));
+app.use(phobos(options));
 
 // start server
 http.createServer(app).listen(8080);
