@@ -7,7 +7,6 @@ path = require 'path'
 {parse: urlParse} = require 'url'
 {os} = require 'mars-deimos'
 response = require './response'
-connect = require 'connect'
 chalk = require 'chalk'
 
 class Phobos
