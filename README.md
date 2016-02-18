@@ -14,7 +14,7 @@ var http = require("http");
 var options = {
   locale : 'zh_CN',
   dir : "./phobos", // dir of mock define files
-  data_list: [], // additional variables files list
+  vars : {"somekey": "somevalue"} // variables for mock define file
   rewrite : [ // rewrite rules
     {
       test : "/wildcard/*",
@@ -83,6 +83,7 @@ define file is a JSON file. you can use `#{name [arg1[, arg2...]]}` to access pr
   "city" : "#{address.city}",
   "zipcode": "#{address.zipcode}",
   "intro": "#{lorem.sentence 1}",
+  "somekey": "#{somekey}",
   "friends_number": "#{number}",
   "lastLocation": {
     "lati" : "#{number.float -180, 180, '0[.]0000'}",

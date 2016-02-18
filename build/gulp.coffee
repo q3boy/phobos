@@ -16,7 +16,7 @@ deps     = require './deps'
 cs    = ['lib/**/*.coffee']
 js    = ["lib/**/*.js"]
 tests = ['tests/**/test-*.coffee']
-clean = ['coverage']
+clean = ['coverage', 'dist']
 
 wfiles = js.concat(cs).concat(tests)
 
@@ -34,6 +34,13 @@ gulp.task 'coffee', ['clean'], ->
     .pipe coffee bare: true
     .on 'error', util.log
     .pipe gulp.dest './dist/'
+
+gulp.task 'publish', ['coffee'], ->
+  futil.copySync 'tests/def', 'dist/tests/def', (err) ->
+    throw err if err
+  gulp.src './dist/tests/**/test-*.js', read: false
+    .pipe mocha reporter: noti.decorate 'tap'
+
 
 gulp.task 'cover', ['coffee'], ->
   futil.copySync 'tests/def', 'dist/tests/def', (err) ->

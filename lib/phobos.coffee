@@ -15,10 +15,10 @@ class Phobos
     @cwd = process.cwd()
     @rewrite = []
     @initOptions(opt).parseDir().parseRewrite()
-    @response = response data_list: @options.locale_file, locale : @options.locale
+    @response = response @options.vars, locale_data: @options.locale_data, locale : @options.locale
 
   initOptions : (opt)->
-    options = dir : '.phobos', locale : 'zh_CN', locale_file : null, rewrite : []
+    options = dir : '.phobos', locale : 'zh_CN', locale_data : {}, rewrite : [], vars : {}
     rc = path.join @cwd, '.phobosrc'
     if fs.existsSync rc
       try

@@ -12,21 +12,36 @@ tpl =
     {name : '#{person.name}'}
   ]
   name2 : '#{person.name}'
+  somekey : '#{somekey}'
+  address : '#{address}'
 
 describe 'Response', ->
-  it 'url as key', ->
-    r = response()
-    r1 = r.trans(tpl, '/abc')
-    r2 = r.trans(tpl, '/def')
-    e(r1).to.have.property 'name'
-    e(r2).to.have.property 'name'
-    e(r1).to.be.not.eql r2
-  it 'child key', ->
-    r = response().trans(tpl, '/abc')
-    e(r).to.have.property 'name'
-    e(r.name).to.be.eql r.name1
-    e(r.name).to.be.not.eql r.child.name1
-    e(r.name).to.be.not.eql r.list[0].name
-    e(r.child.name1).to.be.eql r.child.name2
-    e(r.list[0].name).to.be.not.eql r.list[1].name
-    e(r.name).to.be.eql r.name2
+  describe 'random seed', ->
+    it 'base on url', ->
+      r = response somekey : 'somevalue'
+      r1 = r.trans(tpl, '/abc')
+      r2 = r.trans(tpl, '/def')
+      e(r1).to.have.property 'name'
+      e(r2).to.have.property 'name'
+      e(r1).to.be.not.eql r2
+    it 'change when indent', ->
+      r = response(somekey : 'somevalue').trans(tpl, '/abc')
+      e(r).to.have.property 'name'
+      e(r.name).to.be.eql r.name1
+      e(r.name).to.be.not.eql r.child.name1
+      e(r.name).to.be.not.eql r.list[0].name
+      e(r.child.name1).to.be.eql r.child.name2
+      e(r.list[0].name).to.be.not.eql r.list[1].name
+      e(r.name).to.be.eql r.name2
+  describe 'with user-defined vars', ->
+    it 'not overwrite demios predefined', ->
+      r = response somekey : 'somevalue'
+      r = r.trans(tpl, '/abc')
+      e(r.somekey).to.be.eql 'somevalue'
+    it 'overwrite demios predefined', ->
+      r = response somekey : 'somevalue', address: 'address'
+      r = r.trans(tpl, '/abc')
+      e(r.address).to.be.eql 'address'
+
+
+
