@@ -12,7 +12,8 @@ class Phobos
   constructor : (opt) ->
     @cwd = process.cwd()
     @rewrite = []
-    @initOptions(opt).parseDir().parseRewrite()
+    @initOptions(opt).parseRewrite()
+    @dir = path.join @cwd, @options.dir unless @options.dir[0] is '/'
     @response = response @options.vars, locale_data: @options.locale_data, locale : @options.locale
 
   initOptions : (opt)->
@@ -23,7 +24,7 @@ class Phobos
         rcOptions = require rc
       catch e
         console.error "[#{chalk.bold.red 'phobos rcfile parse fail'}] " +
-          "\"#{rc}\" #{chalk.gray e.message}"
+          "\"#{path.relative @cwd, rc}\" #{chalk.gray e.message}"
       options = os options, rcOptions
     @options = os options, opt
     @
@@ -34,32 +35,6 @@ class Phobos
         rule = lodash.clone rule
         rule.test = new RegExp "^#{rule.test.replace /\*/g, '(.*)'}$"
       @rewrite.push rule
-    @
-
-
-  parseDir : ->
-    @api = {}
-    dir = path.join @cwd, @options.dir unless @options.dir[0] is '/'
-    return @ unless fs.existsSync dir
-    fsutil.walkSync dir, skipErrors : true, (err, file, stats, next, cache) =>
-      # return unless next? # all done
-      return next() if stats.isDirectory() # skip when is dir
-      return next() unless '.json' is path.extname file # skip when not a json file
-      try
-        json = fs.readFileSync(file).toString()
-        file = path.relative dir, file
-        url = file.substring 0, file.length - 5
-        data = JSON.parse json
-      catch e
-        console.warn "[#{chalk.bold.yellow 'phobos define-file parse fail'}] " +
-          "\"#{path.join @options.dir, file}\" #{chalk.gray e.message}"
-      if data is undefined
-        next()
-      else if (method = path.basename url) in ['get', 'post', 'delete', 'put']
-        @api["#{path.dirname url}@#{method}"] = data
-      else
-        @api["#{url}@all"] = data
-      next()
     @
 
   middleware : ->
@@ -78,11 +53,31 @@ class Phobos
     mw
 
   routerApi : (url, method) ->
+    # check method
+    method = method.toLowerCase()
+    return unless method in ['get', 'post', 'put', 'delete']
+
+    # get filepath
     {pathname} = urlParse url
     pathname = pathname.replace /^\/+/g, ''
-    all = @api["#{pathname}@all"]
-    method = @api["#{pathname}@#{method.toLowerCase()}"]
-    method or all
+
+    # check file
+    fileMethod = path.join @dir, pathname, "#{method.toLowerCase()}.json"
+    fileAll = path.join @dir, "#{pathname}.json"
+    if fs.existsSync fileMethod
+      file = fileMethod
+    else if fs.existsSync fileAll
+      file = fileAll
+    else
+      return
+    try
+      json = fs.readFileSync(file).toString()
+      file = path.relative @cwd, file
+      data = JSON.parse json
+    catch e
+      console.warn "[#{chalk.bold.yellow 'phobos define-file parse fail'}] " +
+        "\"#{file}\" #{chalk.gray e.message}"
+    return data
 
   routerRewrite : (url, reqMethod) ->
     for {test, target, method} in @rewrite

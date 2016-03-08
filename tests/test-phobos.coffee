@@ -54,17 +54,6 @@ describe 'phobos', ->
       p = new phobos.Phobos()
       e(phobos.rewrite).to.be.empty
       process.chdir defDir
-
-  describe 'parse define files', ->
-    it 'ok', ->
-      p = new phobos.Phobos()
-      e(p.api).to.have.property 'person@all'
-      e(p.api).to.have.property 'pp@get'
-    it 'skip syntax error', ->
-      fs.writeFileSync './phobos_define/syntax_error.json', fs.readFileSync './syntax_error.json'
-      p = new phobos.Phobos()
-      e(p.api).to.not.have.property 'syntax_error@all'
-      fs.unlinkSync './phobos_define/syntax_error.json'
   describe 'routerApi', ->
     it 'method match', ->
       p = new phobos.Phobos()
@@ -76,10 +65,20 @@ describe 'phobos', ->
       data2 = p.routerApi '/person', 'post'
       e(data1).to.be.a 'object'
       e(data1).to.be.eql data2
-    it 'not match', ->
+    it 'file not found', ->
       p = new phobos.Phobos()
       data = p.routerApi '/not_exists', 'get'
       e(data).to.be.a 'undefined'
+    it 'method not match', ->
+      p = new phobos.Phobos()
+      data = p.routerApi '/person', 'aaa'
+      e(data).to.be.a 'undefined'
+    it 'syntax_error', ->
+      fs.writeFileSync './phobos_define/syntax_error.json', fs.readFileSync './syntax_error.json'
+      p = new phobos.Phobos()
+      data = p.routerApi '/syntax_error', 'get'
+      e(data).to.be.a 'undefined'
+      fs.unlinkSync './phobos_define/syntax_error.json'
   describe 'middleware', ->
     before (done)->
       server.start {}, done
