@@ -44,12 +44,13 @@ class Phobos
       method = req.method.toUpperCase()
 
       run = (post)=>
+        url = req.url
         if urlRewrite = @routerRewrite req.url, method
           req.ordinaryUrl = url
           req.url = url = urlRewrite
         # {path: url} = urlParse req.url, true
         return if @routerProxy req, resp, next
-        return unless (data = @routerApi req.url, method)?
+        return unless (data = @routerApi url, method)?
         resp.writeHead 200, 'Content-Type': 'application/json; charset=utf-8'
         resp.end JSON.stringify @response.trans data, req.url, post
         return
