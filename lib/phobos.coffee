@@ -4,6 +4,7 @@ lodash = require 'lodash'
 fsutil = require 'nodejs-fs-utils'
 path = require 'path'
 {parse: urlParse} = require 'url'
+{parse: queryParse} = require 'querystring'
 {os} = require 'mars-deimos'
 response = require './response'
 chalk = require 'chalk'
@@ -38,17 +39,34 @@ class Phobos
     @
 
   middleware : ->
+
     mw = (req, resp, next) =>
-      method = req.method.toLowerCase()
-      if urlRewrite = @routerRewrite req.url, method
-        req.ordinaryUrl = url
-        req.url = url = urlRewrite
-      {path: url, query} = urlParse req.url
-      return if @routerProxy req, resp, next
-      return unless (data = @routerApi url, method)?
-      resp.writeHead 200, 'Content-Type': 'application/json; charset=utf-8'
-      resp.end JSON.stringify @response.trans data, "#{url}@#{method}", query
-      return
+      method = req.method.toUpperCase()
+
+      run = (post)=>
+        if urlRewrite = @routerRewrite req.url, method
+          req.ordinaryUrl = url
+          req.url = url = urlRewrite
+        # {path: url} = urlParse req.url, true
+        return if @routerProxy req, resp, next
+        return unless (data = @routerApi req.url, method)?
+        resp.writeHead 200, 'Content-Type': 'application/json; charset=utf-8'
+        resp.end JSON.stringify @response.trans data, req.url, post
+        return
+
+      if method is 'POST' or method is 'PUT'
+        chunks = []
+        req.on 'data', (chunk) -> chunks.push(chunk)
+        req.on 'end', ->
+          raw = Buffer.concat(chunks).toString()
+          post = {}
+          try
+            post = JSON.parse raw
+          catch e
+            post = queryParse raw
+          run post
+      else
+        run {}
     mw.phobos = @
     mw
 

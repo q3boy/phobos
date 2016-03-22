@@ -42,6 +42,12 @@ describe 'Response', ->
       r = response somekey : 'somevalue', address: 'address'
       r = r.trans(tpl, '/abc')
       e(r.address).to.be.eql 'address'
+  describe 'with url querystring', ->
+    it 'ok', ->
+      r = response somekey : 'somevalue'
+      r = r.trans(Object.assign({}, tpl, {getkey: '#{GET.somekey}', postkey: '#{POST.somekey}'}), '/abc?somekey=somevalue', somekey : 'somevalue')
+      e(r.getkey).to.be.eql 'somevalue'
+      e(r.postkey).to.be.eql 'somevalue'
 
 
 

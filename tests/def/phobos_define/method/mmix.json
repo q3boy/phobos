@@ -1,0 +1,4 @@
+{
+  "getkey": "#{GET.somekey}",
+  "postkey": "#{POST.somekey}"
+}

@@ -1,0 +1,3 @@
+{
+  "somekey": "#{POST.somekey}"
+}

@@ -83,6 +83,27 @@ describe 'phobos', ->
     before (done)->
       server.start {}, done
     after (done) -> server.stop done
+    describe 'http method', ->
+      it 'is get', (done)->
+        server.req '/method/mget?somekey=somevalue', null, 'get', (data, headers) ->
+          e(headers['content-type']).to.be.eql 'application/json; charset=utf-8'
+          d = JSON.parse data
+          e(d.somekey).to.be.eql 'somevalue'
+          done()
+      it 'is post', (done)->
+        server.req '/method/mpost', '{"somekey":"somevalue"}', 'post', (data, headers) ->
+          e(headers['content-type']).to.be.eql 'application/json; charset=utf-8'
+          d = JSON.parse data
+          e(d.somekey).to.be.eql 'somevalue'
+          done()
+      it 'is mixed', (done)->
+        server.req '/method/mmix?somekey=getvalue', '{"somekey":"postvalue"}', 'post', (data, headers) ->
+          e(headers['content-type']).to.be.eql 'application/json; charset=utf-8'
+          d = JSON.parse data
+          console.log(d)
+          e(d.getkey).to.be.eql 'getvalue'
+          e(d.postkey).to.be.eql 'postvalue'
+          done()
     describe 'without rewrite', ->
       it 'data found', (done)->
         server.req '/pp', null, 'get', (data, headers) ->
