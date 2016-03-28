@@ -46,11 +46,14 @@ class Phobos
       run = (post)=>
         url = req.url
         if urlRewrite = @routerRewrite req.url, method
-          req.ordinaryUrl = url
-          req.url = url = urlRewrite
+          if  /^http:\/\/.+/.test req.url
+            req.proxyToUrl = urlRewrite
+          else
+            req.ordinaryUrl = url
+            req.url = url = urlRewrite
         # {path: url} = urlParse req.url, true
-        return if @routerProxy req, resp, next
-        return unless (data = @routerApi url, method)?
+        return next() if @routerProxy req, resp, next
+        return next() unless (data = @routerApi url, method)?
         resp.writeHead 200, 'Content-Type': 'application/json; charset=utf-8'
         resp.end JSON.stringify @response.trans data, req.url, post
         return
@@ -105,7 +108,8 @@ class Phobos
         return url.replace test, target
 
   routerProxy : (req, resp, next) ->
-    return next() unless /^http:\/\/.+/.test req.url
+    return unless req.proxyToUrl
+    # return next() unless /^http:\/\/.+/.test req.url
     req.pause()
     options = urlParse req.url
     req.url = req.ordinaryUrl
